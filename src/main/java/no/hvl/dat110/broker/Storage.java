@@ -49,7 +49,7 @@ public class Storage {
 
 	public void addClientSession(String user, Connection connection) {
         ClientSession clientSession = new ClientSession(user, connection);
-        clients.put(user, clientSession);
+        clients.putIfAbsent(user, clientSession);
 	}
 
 	public void removeClientSession(String user) {
@@ -68,11 +68,11 @@ public class Storage {
 	}
 
 	public void addSubscriber(String user, String topic) {
-        subscriptions.put(topic, ConcurrentHashMap.newKeySet());
+        subscriptions.putIfAbsent(topic, ConcurrentHashMap.newKeySet());
         subscriptions.get(topic).add(user);
 	}
 
 	public void removeSubscriber(String user, String topic) {
-       subscriptions.remove(topic).remove(user);
+       subscriptions.get(topic).remove(user);
 	}
 }

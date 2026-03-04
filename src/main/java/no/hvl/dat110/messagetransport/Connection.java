@@ -34,7 +34,7 @@ public class Connection {
 
 		// TODO 
 		// encapsulate the data contained in the message and write to the output stream
-		
+        
 		try {
 
 			byte[] sendbuf = message.encapsulate();

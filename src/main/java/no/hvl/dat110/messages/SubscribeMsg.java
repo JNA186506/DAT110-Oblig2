@@ -3,7 +3,6 @@ package no.hvl.dat110.messages;
 public class SubscribeMsg extends Message {
 
 	// message sent from client to subscribe on a topic 
-    private String user;
     private String topic;
 
     public SubscribeMsg(String user, String topic) {
@@ -17,15 +16,6 @@ public class SubscribeMsg extends Message {
 	// Complete the constructor, get/set-methods, and toString method
 	// as described in the project text
 
-    @Override
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
     public String getTopic() {
         return topic;
     }
@@ -37,8 +27,7 @@ public class SubscribeMsg extends Message {
     @Override
     public String toString() {
         return "SubscribeMsg{" +
-                "user='" + user + '\'' +
-                ", topic='" + topic + '\'' +
+                "topic='" + topic + '\'' +
                 '}';
     }
 }

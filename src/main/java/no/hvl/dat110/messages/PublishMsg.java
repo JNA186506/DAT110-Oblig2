@@ -14,13 +14,6 @@ public class PublishMsg extends Message {
         this.message = message;
 	}
 
-	// TODO:
-	// Implement object variables - a topic and a message is required
-
-	// Complete the constructor, get/set-methods, and toString method
-	// as described in the project text
-
-
     public String getTopic() {
         return topic;
     }
@@ -33,6 +26,10 @@ public class PublishMsg extends Message {
         this.message = message;
     }
 
+    public String getMessage() {
+		return message;
+	}
+
     @Override
     public String toString() {
         return "PublishMsg{" +
@@ -41,7 +38,4 @@ public class PublishMsg extends Message {
                 '}';
     }
 
-    public String getMessage() {
-		return message;
-	}
 }
