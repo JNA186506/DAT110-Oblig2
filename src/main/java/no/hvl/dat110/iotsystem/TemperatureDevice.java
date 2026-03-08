@@ -1,6 +1,5 @@
 package no.hvl.dat110.iotsystem;
 
-import no.hvl.dat110.broker.ClientSession;
 import no.hvl.dat110.client.Client;
 import no.hvl.dat110.common.TODO;
 
@@ -26,6 +25,7 @@ public class TemperatureDevice {
         for (int i = 0; i < COUNT; i++) {
             int temp = sn.read();
             String message = Integer.toString(temp);
+            System.out.println("Sent: " + message.toString());
             client.publish(topic, message);
         }
 		// - disconnect from the broker
