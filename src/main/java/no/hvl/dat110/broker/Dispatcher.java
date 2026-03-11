@@ -1,5 +1,6 @@
 package no.hvl.dat110.broker;
 
+import java.util.List;
 import java.util.Set;
 import java.util.Collection;
 
@@ -92,13 +93,21 @@ public class Dispatcher extends Stopable {
 		Logger.log("onConnect:" + msg.toString());
 
 		storage.addClientSession(user, connection);
+        
+        List<Message> offlineMessages = storage.getOfflineMsgs(user);
+        
+        if (!offlineMessages.isEmpty()) {
+            ClientSession session = storage.getSession(user);
+            offlineMessages.forEach(session::send);
+            storage.clearOfflineMsgs(user);
+        }
 
 	}
 
 	public void onDisconnect(DisconnectMsg msg) {
 
 		String user = msg.getUser();
-
+        
 		Logger.log("onDisconnect:" + msg.toString());
 
 		storage.removeClientSession(user);
@@ -152,11 +161,11 @@ public class Dispatcher extends Stopable {
         
         for (String subscriber : subscribers) {
             ClientSession session = storage.getSession(subscriber);
-            
-            if (session != null) {
-                session.send(msg);
+    
+            if (session == null) {
+                storage.storeOfflineMessage(subscriber, msg);
             } else {
-                Logger.log("onPublish: no active session for subscriber " + subscriber);
+                session.send(msg);
             }
         }
 	}

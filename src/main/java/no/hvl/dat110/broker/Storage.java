@@ -1,11 +1,15 @@
 package no.hvl.dat110.broker;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import no.hvl.dat110.common.TODO;
 import no.hvl.dat110.common.Logger;
+import no.hvl.dat110.messages.Message;
 import no.hvl.dat110.messagetransport.Connection;
 
 public class Storage {
@@ -19,9 +23,12 @@ public class Storage {
 	
 	protected ConcurrentHashMap<String, ClientSession> clients;
 
+    protected ConcurrentHashMap<String, List<Message>> offlineMsgs;
+    
 	public Storage() {
 		subscriptions = new ConcurrentHashMap<String, Set<String>>();
 		clients = new ConcurrentHashMap<String, ClientSession>();
+        offlineMsgs = new ConcurrentHashMap<String, List<Message>>();
 	}
 
 	public Collection<ClientSession> getSessions() {
@@ -75,4 +82,19 @@ public class Storage {
 	public void removeSubscriber(String user, String topic) {
        subscriptions.get(topic).remove(user);
 	}
+    
+    public void storeOfflineMessage(String user, Message msg) {
+        offlineMsgs.putIfAbsent(user, new ArrayList<>());
+        offlineMsgs.get(user).add(msg);
+    }
+    
+    public List<Message> getOfflineMsgs(String user) {
+        List<Message> msgs = offlineMsgs.get(user);
+        if (msgs == null)  return new ArrayList<Message>();
+        return new ArrayList<>(msgs);
+    }
+    
+    public void clearOfflineMsgs(String user) {
+        offlineMsgs.remove(user);
+    }
 }
